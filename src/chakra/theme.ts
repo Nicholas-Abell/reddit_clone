@@ -1,6 +1,6 @@
 // 1. Import `extendTheme`
 import { extendTheme } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
+import { Button } from "./button";
 
 import '@fontsource/raleway';
 import '@fontsource/open-sans/300.css';
@@ -24,7 +24,7 @@ export const theme = extendTheme({
             }
         })
     },
-    componemts: {
+    components: {
         Button,
     }
 });
