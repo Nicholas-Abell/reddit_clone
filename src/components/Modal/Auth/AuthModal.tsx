@@ -25,10 +25,18 @@ const AuthModal: React.FC<AuthModalProps> = () => {
             <Modal isOpen={modalState.open} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
+                    <ModalHeader>
+                        {modalState.view === 'login' && 'Login'}
+                        {modalState.view === 'signup' && 'Sign Up'}
+                        {modalState.view === 'resetPassword' && 'Reset Password'}
+                    </ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
-                        Modal body
+                    <ModalBody className='flex flex-col items-center justify-center'>
+                        <div className='flex flex-col justify-center items-center w-[70%] border border-red-500'>
+                            {/* <OAuthButtons /> */}
+                            {/* <AuthInputs /> */}
+                            {/* <ResetPassword /> */}
+                        </div>
                     </ModalBody>
 
                     <ModalFooter>
