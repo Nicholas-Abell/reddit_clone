@@ -7,6 +7,7 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { authModalState } from '../../../atoms/authModalAtom';
 import AuthInputs from './AuthInputs';
+import OAuthButtons from './OAuthButtons';
 
 type AuthModalProps = {
 
@@ -33,7 +34,8 @@ const AuthModal: React.FC<AuthModalProps> = () => {
                     <ModalCloseButton />
                     <ModalBody className='flex flex-col items-center justify-center mb-6'>
                         <div className='flex flex-col justify-center items-center w-[70%]'>
-                            {/* <OAuthButtons /> */}
+                            <OAuthButtons />
+                            <p className='text-gray-500 font-bold'>OR</p>
                             <AuthInputs />
                             {/* <ResetPassword /> */}
                         </div>
