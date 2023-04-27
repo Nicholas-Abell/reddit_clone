@@ -1,8 +1,7 @@
 import {
-    Button, Modal, ModalOverlay,
+    Modal, ModalOverlay,
     ModalContent, ModalHeader,
     ModalCloseButton, ModalBody,
-    ModalFooter, useDisclosure
 } from '@chakra-ui/react';
 import React from 'react';
 import { useRecoilState } from 'recoil';
