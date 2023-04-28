@@ -2,6 +2,9 @@ import { authModalState } from '../../../atoms/authModalAtom';
 import { Button, Input } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { auth } from '../../../firebase/clientApp';
+import { FIREBASE_ERRORS } from '../../../firebase/errors';
 
 type SignUpProps = {
 
@@ -12,10 +15,22 @@ const SignUp: React.FC<SignUpProps> = () => {
 
     const [signUpForm, setSignUpForm] = useState({
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
     });
 
-    const onSubmit = () => { };
+    const [error, setError] = useState('')
+    const [createUserWithEmailAndPassword, user, loading, userError,] = useCreateUserWithEmailAndPassword(auth);
+
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (error) setError('');
+        if (signUpForm.password !== signUpForm.confirmPassword) {
+            setError('passwords do not match');
+            return;
+        }
+        createUserWithEmailAndPassword(signUpForm.email, signUpForm.password);
+    };
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSignUpForm((prev) => ({
@@ -52,7 +67,14 @@ const SignUp: React.FC<SignUpProps> = () => {
 
                 onChange={onChange}
             />
-            <Button className='w-full h-[36px] my-2'>Sign Up</Button>
+            {
+                (error || userError) && (
+                    <p className='text-red-600 text'>
+                        {error || FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
+                    </p>
+                )
+            }
+            <Button type='submit' isLoading={loading} className='w-full h-[36px] my-2'>Sign Up</Button>
             <div className='text-xs flex justify-center'>
                 <p className='mr-1'>Already a redditor?</p>
                 <p onClick={() =>
