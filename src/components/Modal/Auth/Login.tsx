@@ -1,7 +1,11 @@
+import { auth } from '@/src/firebase/clientApp';
 import { authModalState } from '../../../atoms/authModalAtom';
 import { Button, Input } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useSetRecoilState } from 'recoil';
+import { FIREBASE_ERRORS } from '@/src/firebase/errors';
+
 
 type LoginProps = {
 
@@ -15,7 +19,18 @@ const Login: React.FC<LoginProps> = () => {
         password: ''
     });
 
-    const onSubmit = () => { };
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useSignInWithEmailAndPassword(auth);
+
+    const onSubmit = (event: React.FormEvent<HTMLElement>) => {
+        event.preventDefault();
+
+        signInWithEmailAndPassword(loginForm.email, loginForm.password)
+    };
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setLoginForm((prev) => ({
@@ -43,7 +58,14 @@ const Login: React.FC<LoginProps> = () => {
 
                 onChange={onChange}
             />
-            <Button className='w-full h-[36px] my-2'>Log In</Button>
+            <p className='text-red-600'>{FIREBASE_ERRORS[error?.message as keyof typeof FIREBASE_ERRORS]}</p>
+            <Button
+                className='w-full h-[36px] my-2'
+                type='submit'
+                isLoading={loading}
+            >
+                Log In
+            </Button>
             <div className='text-xs flex justify-center'>
                 <p className='mr-1'>New Here?</p>
                 <p onClick={() =>
