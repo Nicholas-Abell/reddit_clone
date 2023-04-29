@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
                 <Image src='/images/redditText.svg' height='46px' display={{ base: 'none', md: 'unset' }} />
             </div>
             <SearchInput />
-            <RightContent user={user}/>
+            <RightContent user={user} />
         </div>
     )
 }
