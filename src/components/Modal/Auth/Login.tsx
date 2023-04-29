@@ -67,6 +67,19 @@ const Login: React.FC<LoginProps> = () => {
                 Log In
             </Button>
             <div className='text-xs flex justify-center'>
+                <p className='mr-1'>Forgot your password?</p>
+                <p onClick={() =>
+                    setAuthModalState((prev) => ({
+                        ...prev,
+                        view: 'resetPassword',
+                    }))
+                }
+                    className='text-blue-500 font-bold cursor-pointer'
+                >
+                    RESET
+                </p>
+            </div>
+            <div className='text-xs flex justify-center'>
                 <p className='mr-1'>New Here?</p>
                 <p onClick={() =>
                     setAuthModalState((prev) => ({
