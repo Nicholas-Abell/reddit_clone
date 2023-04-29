@@ -1,9 +1,10 @@
+import { auth } from '@/src/firebase/clientApp';
 import { Image } from '@chakra-ui/react';
 import React from 'react';
-import SearchInput from './SearchInput';
-import RightContent from './RightContent/RightContent';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/src/firebase/clientApp';
+import Directory from './Directory/Directory';
+import RightContent from './RightContent/RightContent';
+import SearchInput from './SearchInput';
 
 const Navbar: React.FC = () => {
     const [user, loading, error] = useAuthState(auth);
@@ -14,6 +15,7 @@ const Navbar: React.FC = () => {
                 <Image src='/images/redditface.svg' height='30px' />
                 <Image src='/images/redditText.svg' height='46px' display={{ base: 'none', md: 'unset' }} />
             </div>
+            {user && <Directory user={user} />}
             <SearchInput />
             <RightContent user={user} />
         </div>
