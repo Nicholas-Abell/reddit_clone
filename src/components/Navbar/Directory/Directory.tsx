@@ -3,6 +3,7 @@ import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { User } from 'firebase/auth';
 import React from 'react';
 import { TiHome } from 'react-icons/ti';
+import Communities from './Communities';
 
 type DirectoryProps = {
     user?: User | null;
@@ -22,10 +23,7 @@ const Directory: React.FC<DirectoryProps> = ({ user }) => {
                 </div>
             </MenuButton>
             <MenuList>
-                {/* <Communities /> */}
-                <MenuItem>
-                    Community
-                </MenuItem>
+                <Communities />
             </MenuList>
         </Menu >
     )
