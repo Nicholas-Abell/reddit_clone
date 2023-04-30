@@ -31,12 +31,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }) => {
                                     <FaRedditSquare size={30} />
                                 </div>
                                 <div className='flex flex-col justify-left items-start mr-4'>
-                                    <p className='text-gray-400 text-sm'>
+                                    <p className='text-gray-400 text-xs'>
                                         {user?.displayName || user?.email?.split('@')[0]}
                                     </p>
-                                    <div className='hidden md:flex gap-2 items-center cursor-pointer text-gray-300'>
+                                    <div className='hidden md:flex gap-[1px] items-center cursor-pointer text-gray-300'>
                                         <IoSparkles className='text-red-600' size={10} />
-                                        <p className='text-sm'>Karma</p>
+                                        <p className='text-xs'>1200</p>
                                     </div>
                                 </div>
                                 <ChevronDownIcon />
