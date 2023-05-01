@@ -1,6 +1,6 @@
 import { auth, firestore } from '@/src/firebase/clientApp';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Input, Checkbox } from '@chakra-ui/react';
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, getDoc, runTransaction, serverTimestamp, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -44,20 +44,29 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({ open, handl
 
         try {
             const communityDocRef = doc(firestore, 'communities', communityName);
-            const communityDoc = await getDoc(communityDocRef);
 
-            //check if community exist
-            if (communityDoc.exists()) {
-                throw new Error(`Sorry r/${communityName} is taken. Try Another.`)
-            }
+            await runTransaction(firestore, async (transaction) => {
+                //check if community exist
+                const communityDoc = await transaction.get(communityDocRef);
+                if (communityDoc.exists()) {
+                    throw new Error(`Sorry r/${communityName} is taken. Try Another.`)
+                }
+                //create community
+                transaction.set(communityDocRef, {
+                    creatorId: user?.uid,
+                    createdAt: serverTimestamp(),
+                    numberOfMembers: 1,
+                    privacyType: communityType,
+                });
 
-            //create community
-            await setDoc(communityDocRef, {
-                creatorId: user?.uid,
-                createdAt: serverTimestamp(),
-                numberOfMembers: 1,
-                privacyType: communityType,
+                //create community snippet on user
+                transaction.set(doc(firestore, `users/${user?.uid}/communitySnippets`, communityName), {
+                    communityID: communityName,
+                    isModerator: true,
+                });
             });
+
+
 
         } catch (error: any) {
             console.log('hanldeCreateCommunity error', error);
