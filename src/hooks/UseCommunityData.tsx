@@ -44,39 +44,66 @@ const UseCommunityData = () => {
         setLoading(false);
     }
 
-    const joinCommunity = async (communityData: Community) => {
+    const joinCommunity = async (community: Community) => {
         try {
             const batch = writeBatch(firestore);
 
             //create new snippet for user
             const newSnippet: CommunitySnippet = {
-                communityId: communityData.id,
-                imageURL: communityData.imageURL || '',
+                communityId: community.id,
+                imageURL: community.imageURL || '',
             }
-            batch.set(doc(
-                firestore, `user${user?.uid}/communitySnippets`,
-                communityData.id
-            ),
+            batch.set(
+                doc(
+                    firestore,
+                    `users/${user?.uid}/communitySnippets`,
+                    community.id
+                ),
                 newSnippet
             );
 
             //update the number of members
-            batch.update(doc(firestore, 'communities', communityData.id), {
+            batch.update(doc(firestore, 'communities', community.id), {
                 numberOfMembers: increment(1),
             })
             await batch.commit();
-            setCommunityStateValue(prev => ({
+            setCommunityStateValue((prev) => ({
+                ...prev,
                 mySnippets: [...prev.mySnippets, newSnippet],
             }))
 
         } catch (error: any) {
-            console.log('joinCommunity Error: ', error);
+            console.log('joinCommunity Error: ', error.message);
             setError(error.message);
         }
+        setLoading(false);
     };
 
-    const leaveCommunity = (communityId: string) => {
+    const leaveCommunity = async (communityId: string) => {
+        setLoading(true);
+        try {
+            const batch = writeBatch(firestore);
 
+            batch.delete(doc(firestore, `users/${user?.uid}/communitySnippets`, communityId));
+
+            //update the number of members
+            batch.update(doc(firestore, 'communities', communityId), {
+                numberOfMembers: increment(-1),
+            });
+
+            await batch.commit();
+
+            setCommunityStateValue(prev => ({
+                ...prev,
+                mySnippets: prev.mySnippets.filter(
+                    (item) => item.communityId !== communityId),
+            }));
+
+        } catch (error: any) {
+            console.group('leaveCommunity Error: ', error.message);
+            setError(error.message);
+        }
+        setLoading(false);
     };
 
     useEffect(() => {
