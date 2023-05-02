@@ -1,6 +1,7 @@
 import { Community } from '@/src/atoms/communitiesAtom';
 import { Button, Image } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
+import UseCommunityData from '@/src/hooks/UseCommunityData';
 
 //icons
 import { FaReddit } from 'react-icons/fa'; 'react-icons/fa'
@@ -11,7 +12,8 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ communityData }) => {
     //fix icon gap
-    const [isJoined, setIsJoined] = useState(false);
+    const { communityStateValue, onJoinOrLeaveCommunity, loading } = UseCommunityData();
+    const isJoined = !!communityStateValue.mySnippets.find((item) => item.communityId === communityData.id);
 
     return (
         <div className='flex flex-col w-full h-[146px]'>
@@ -39,7 +41,8 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
                             variant={isJoined ? 'outline' : 'solid'}
                             height={'30px'}
                             px={'6'}
-                            onClick={() => { }}
+                            isLoading={loading}
+                            onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
                         >
                             {isJoined ? 'Joined' : 'Join'}
                         </Button>
