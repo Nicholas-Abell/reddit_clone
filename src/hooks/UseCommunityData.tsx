@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { Community, CommunitySnippet, communityState } from '../atoms/communitiesAtom';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs, increment, writeBatch } from 'firebase/firestore';
 import { auth, firestore } from '../firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -37,15 +37,47 @@ const UseCommunityData = () => {
                 mySnippets: snippets as Array<CommunitySnippet>
             }))
 
-        } catch (error) {
+        } catch (error: any) {
             console.log('getMySnippets error', error);
+            setError(error.message);
         }
         setLoading(false);
     }
 
-    const joinCommunity = (communityData: Community) => { };
+    const joinCommunity = async (communityData: Community) => {
+        try {
+            const batch = writeBatch(firestore);
 
-    const leaveCommunity = (communityId: string) => { };
+            //create new snippet for user
+            const newSnippet: CommunitySnippet = {
+                communityId: communityData.id,
+                imageURL: communityData.imageURL || '',
+            }
+            batch.set(doc(
+                firestore, `user${user?.uid}/communitySnippets`,
+                communityData.id
+            ),
+                newSnippet
+            );
+
+            //update the number of members
+            batch.update(doc(firestore, 'communities', communityData.id), {
+                numberOfMembers: increment(1),
+            })
+            await batch.commit();
+            setCommunityStateValue(prev => ({
+                mySnippets: [...prev.mySnippets, newSnippet],
+            }))
+
+        } catch (error: any) {
+            console.log('joinCommunity Error: ', error);
+            setError(error.message);
+        }
+    };
+
+    const leaveCommunity = (communityId: string) => {
+
+    };
 
     useEffect(() => {
         if (!user) return;
