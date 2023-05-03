@@ -4,13 +4,11 @@ import React, { useState } from 'react';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { BiPoll } from 'react-icons/bi';
-import { type } from 'os';
 import { Icon } from '@chakra-ui/react';
 import TabItem from './TabItem';
+import TextInput from './PostForm/TextInput';
 
-type NewPostFormProps = {
-
-};
+type NewPostFromProps = {};
 
 const formTabs = [
     {
@@ -35,16 +33,27 @@ const formTabs = [
     },
 ];
 
-export type TabItem = {
+export type TabItems = {
     title: string;
     icon: typeof Icon.arguments;
 };
 
-const NewPostForm: React.FC<NewPostFormProps> = () => {
+const NewPostForm: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
+    const [textInput, setTextInput] = useState({
+        title: '',
+        body: '',
+    });
+    const [selectedFile, setSelectedFile] = useState<string>();
+
+    const handleCreatePost = async () => { };
+
+    const onSelectImage = () => { };
+
+    const onTextChange = () => { };
 
     return (
-        <div className='flex bg-white rounded mt-2'>
+        <div className='flex flex-col bg-white rounded mt-2'>
             <div className='w-full flex'>
                 {
                     formTabs.map((item) => {
@@ -53,6 +62,9 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
                         )
                     })
                 }
+            </div>
+            <div className='flex'>
+                <TextInput />
             </div>
         </div>
     )
