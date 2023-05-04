@@ -50,7 +50,19 @@ const NewPostForm: React.FC = () => {
 
     const handleCreatePost = async () => { };
 
-    const onSelectImage = () => { };
+    const onSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const reader = new FileReader();
+
+        if (event.target.files?.[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        reader.onload = (readerEvent) => {
+            if (readerEvent.target?.result) {
+                setSelectedFile(readerEvent.target.result as string)
+            }
+        }
+    };
 
     const onTextChange = ({
         target: { name, value },
@@ -89,7 +101,12 @@ const NewPostForm: React.FC = () => {
                 }
                 {
                     selectedTab === 'Images & Video' && (
-                        <ImageUpload />
+                        <ImageUpload
+                            selectedFile={selectedFile}
+                            onSelectedImage={onSelectImage}
+                            setSelectedTab={setSelectedTab}
+                            setSelectedFile={setSelectedFile}
+                        />
                     )
                 }
             </div>

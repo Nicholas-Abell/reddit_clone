@@ -3,10 +3,13 @@ import { Input } from 'postcss';
 import React, { useRef } from 'react';
 
 type ImageUploadProps = {
-
+    selectedFile?: string;
+    onSelectedImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    setSelectedTab: (value: string) => void;
+    setSelectedFile: (value: string) => void;
 };
 
-const ImageUpload: React.FC<ImageUploadProps> = () => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ setSelectedFile, onSelectedImage, setSelectedTab, selectedFile }) => {
 
     const selectedFileRef = useRef<HTMLInputElement>(null);
 
