@@ -1,5 +1,4 @@
 import { Button } from '@chakra-ui/react';
-import { Input } from 'postcss';
 import React, { useRef } from 'react';
 
 type ImageUploadProps = {
