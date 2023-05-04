@@ -7,6 +7,7 @@ import { BiPoll } from 'react-icons/bi';
 import { Icon } from '@chakra-ui/react';
 import TabItem from './TabItem';
 import TextInput from './PostForm/TextInput';
+import ImageUpload from './PostForm/ImageUpload';
 
 type NewPostFromProps = {};
 
@@ -68,9 +69,11 @@ const NewPostForm: React.FC = () => {
                     formTabs.map((item) => {
                         return (
                             <TabItem
+                                key={item.title} //add random key generator later
                                 item={item}
                                 selected={item.title === selectedTab}
-                                setSelectedTab={setSelectedTab} />
+                                setSelectedTab={setSelectedTab}
+                            />
                         )
                     })
                 }
@@ -83,6 +86,11 @@ const NewPostForm: React.FC = () => {
                         handleCreatePost={handleCreatePost}
                         onChange={onTextChange}
                         loading={false} />)
+                }
+                {
+                    selectedTab === 'Images & Video' && (
+                        <ImageUpload />
+                    )
                 }
             </div>
         </div>
