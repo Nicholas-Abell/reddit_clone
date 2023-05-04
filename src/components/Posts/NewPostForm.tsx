@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 
 //icons
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
@@ -45,12 +45,21 @@ const NewPostForm: React.FC = () => {
         body: '',
     });
     const [selectedFile, setSelectedFile] = useState<string>();
+    const [loading, setLoading] = useState('');
 
     const handleCreatePost = async () => { };
 
     const onSelectImage = () => { };
 
-    const onTextChange = () => { };
+    const onTextChange = ({
+        target: { name, value },
+    }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setTextInput((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
 
     return (
         <div className='flex flex-col bg-white rounded mt-2'>
@@ -58,13 +67,23 @@ const NewPostForm: React.FC = () => {
                 {
                     formTabs.map((item) => {
                         return (
-                            <TabItem item={item} selected={item.title === selectedTab} setSelectedTab={setSelectedTab} />
+                            <TabItem
+                                item={item}
+                                selected={item.title === selectedTab}
+                                setSelectedTab={setSelectedTab} />
                         )
                     })
                 }
             </div>
             <div className='flex'>
-                <TextInput textInputs={textInput} handleCreatePost={handleCreatePost} onChange={onTextChange} loading={false} />
+                {
+                    selectedTab === 'Post' &&
+                    (<TextInput
+                        textInput={textInput}
+                        handleCreatePost={handleCreatePost}
+                        onChange={onTextChange}
+                        loading={false} />)
+                }
             </div>
         </div>
     )
