@@ -64,7 +64,7 @@ const NewPostForm: React.FC = () => {
                 }
             </div>
             <div className='flex'>
-                <TextInput />
+                <TextInput textInputs={textInput} handleCreatePost={handleCreatePost} onChange={onTextChange} loading={false} />
             </div>
         </div>
     )
