@@ -15,11 +15,37 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ setSelectedFile, onSelectedIm
 
     return (
         <div className='flex justify-center items-center w-full'>
-            <div className='flex justify-center items-center py-20 border border-gray-200 w-full rounded-sm'>
-                <Button onClick={() => selectedFileRef.current?.click()} variant='outline' height='28px'>Upload</Button>
-                <input ref={selectedFileRef} onChange={() => { }} type='file' hidden />
-            </div>
-        </div>
+            {selectedFile
+                ? (<>
+                    <div className='flex flex-col py-4'>
+                        <img src={selectedFile}
+                            className='max-w-[400px] max-h-[400px]'
+                        />
+                        <div className='flex justify-center items-center mt-4 gap-4'>
+                            <Button
+                                height='28px'
+                                onClick={() => setSelectedTab('Post')}
+                            >
+                                Back To Post
+                            </Button>
+                            <Button
+                                height='28px'
+                                onClick={() => setSelectedFile('')}
+                            >
+                                Remove
+                            </Button>
+                        </div>
+                    </div>
+                </>
+                )
+                : (
+                    <div className='flex justify-center items-center py-20 border border-gray-200 w-full rounded-sm'>
+                        <Button onClick={() => selectedFileRef.current?.click()} variant='outline' height='28px'>Upload</Button>
+                        <input ref={selectedFileRef} onChange={onSelectedImage} type='file' hidden />
+                    </div >
+                )
+            }
+        </div >
     )
 }
 export default ImageUpload;
