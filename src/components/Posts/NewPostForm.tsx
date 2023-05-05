@@ -2,7 +2,7 @@ import React, { use, useState } from 'react';
 import TabItem from './TabItem';
 import TextInput from './PostForm/TextInput';
 import ImageUpload from './PostForm/ImageUpload';
-import { Post } from '@/src/atoms/PostAtom';
+import { Post } from '../../atoms/postAtom';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
@@ -153,6 +153,7 @@ const NewPostForm: React.FC<NewPostFromProps> = ({ user }) => {
                     )
                 }
             </div>
+            <p className='text-red-600 text-sm'>{error}</p>
         </div>
     )
 }
