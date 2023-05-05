@@ -18,7 +18,7 @@ const CreatePostLink: React.FC = () => {
             setAuthModalState({ open: true, view: 'login' });
             return;
         }
-        router.push(`/r/${router.query.community}/submit`);
+        router.push(`/r/${router.query.community}/submit`); // returning undefined
     };
 
     return (

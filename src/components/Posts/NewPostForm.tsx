@@ -5,15 +5,16 @@ import ImageUpload from './PostForm/ImageUpload';
 import { Post } from '../../atoms/postAtom';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/router';
+import { Icon } from '@chakra-ui/react';
+import { Timestamp, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { firestore, storage } from '@/src/firebase/clientApp';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 
 //icons
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { BiPoll } from 'react-icons/bi';
-import { Icon } from '@chakra-ui/react';
-import { Timestamp, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { firestore, storage } from '@/src/firebase/clientApp';
-import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+
 
 type NewPostFromProps = {
     user: User;

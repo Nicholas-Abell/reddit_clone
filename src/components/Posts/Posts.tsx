@@ -1,5 +1,7 @@
 import { Community } from '@/src/atoms/communitiesAtom';
+import { Post } from '@/src/atoms/postAtom';
 import { firestore } from '@/src/firebase/clientApp';
+import usePosts from '@/src/hooks/usePosts';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
@@ -9,6 +11,7 @@ type PostsProps = {
 };
 
 const Posts: React.FC<PostsProps> = ({ communityData }) => {
+    const { postStateValue, setPostStateValue } = usePosts();
     const [loading, setLoading] = useState();
     const [error, setError] = useState();
 
@@ -24,6 +27,10 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
 
             //store in post state
             const posts = postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            setPostStateValue((prev) => ({
+                ...prev,
+                posts: posts as Post[],
+            }));
 
             console.log('posts: ', posts)
         } catch (error) {
