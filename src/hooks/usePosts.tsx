@@ -5,7 +5,7 @@ import { postState } from "../atoms/postAtom";
 const usePosts = () => {
     const [postStateValue, setPostStateValue] = useRecoilState(postState);
 
-    const onVote = () => { };
+    const onVote = async () => { };
 
     const onSelectPost = () => { };
 
@@ -13,7 +13,10 @@ const usePosts = () => {
 
     return {
         postStateValue,
-        setPostStateValue
+        setPostStateValue,
+        onVote,
+        onSelectPost,
+        onDeletePost
     };
 };
 
