@@ -6,7 +6,6 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import PostItem from './PostItem';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { it } from 'node:test';
 
 type PostsProps = {
     communityData: Community;
@@ -22,8 +21,6 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
         onDeletePost,
         onSelectPost
     } = usePosts();
-    const [loading, setLoading] = useState();
-    const [error, setError] = useState();
 
     const getPosts = async () => {
         try {
@@ -56,8 +53,9 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
     return (
         <>
             {
-                postStateValue.posts.map((item) => (
+                postStateValue.posts.map((item, key) => (
                     <PostItem
+                        key={key}
                         post={item}
                         userIsCreator={user?.uid === item.creatorId}
                         userVoteValue={0}

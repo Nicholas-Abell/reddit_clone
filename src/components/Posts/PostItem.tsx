@@ -63,9 +63,9 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                     <h2 className='font-bold'>{post.title}</h2>
                     <p className='text-sm'>{post.body}</p>
                     {
-                        post.ImageURL && (
-                            <div className='flex justify-center items-center p-2 max-h-[460px]'>
-                                <img src={post.ImageURL} alt='Post Image' />
+                        post.imageURL && (
+                            <div className='flex justify-center items-center p-2 max-h-full'>
+                                <img src={post.imageURL} alt='Post Image' />
                             </div>
                         )
                     }

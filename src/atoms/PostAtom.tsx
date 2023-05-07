@@ -9,7 +9,7 @@ export type Post = {
     body: string;
     numberOfComments: number;
     voteStatus: number;
-    ImageURL?: string;
+    imageURL?: string;
     communityImageURL?: string;
     createdAt: Timestamp;
 };
@@ -21,7 +21,7 @@ interface PostState {
 
 const defaultPostState: PostState = {
     selectedPost: null,
-    posts: []
+    posts: [],
 };
 
 export const postState = atom<PostState>({
