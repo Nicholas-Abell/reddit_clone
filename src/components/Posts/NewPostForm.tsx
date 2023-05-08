@@ -9,6 +9,7 @@ import { Icon } from '@chakra-ui/react';
 import { Timestamp, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { firestore, storage } from '@/src/firebase/clientApp';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { nanoid } from 'nanoid';
 
 //icons
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
@@ -64,6 +65,7 @@ const NewPostForm: React.FC<NewPostFromProps> = ({ user }) => {
         setLoading(true);
 
         const newPost: Post = {
+            id: nanoid(),
             communityId: communityId as string,
             creatorId: user.uid,
             creatorDisplayName: user.email!.split('@')[0],

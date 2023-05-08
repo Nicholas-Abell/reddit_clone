@@ -1,9 +1,10 @@
 import { Post } from '@/src/atoms/postAtom';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { IoArrowUpCircleSharp, IoArrowUpCircleOutline, IoArrowDownCircleSharp, IoArrowDownCircleOutline, IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';
 import { BsChat } from 'react-icons/bs';
 import { AiOutlineDelete } from 'react-icons/ai';
+import { Skeleton } from '@chakra-ui/react';
 
 
 type PostItemProps = {
@@ -11,11 +12,27 @@ type PostItemProps = {
     userIsCreator: boolean;
     userVoteValue: number;
     onVote: () => {};
-    onDeletePost: () => void;
+    onDeletePost: (post: Post) => Promise<boolean>;
     onSelectPost: () => void;
 };
 
 const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost }) => {
+    const [loadingImage, setLoadingImg] = useState(true);
+    const [error, setError] = useState('');
+
+    const handleDelete = async () => {
+        try {
+            const success = await onDeletePost(post);
+
+            if (!success) {
+                throw new Error('failed to delete post');
+            }
+
+            console.log('Post Deleted');
+        } catch (error: any) {
+            setError(error.message);
+        }
+    }
 
     return (
         <div
@@ -65,7 +82,12 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                     {
                         post.imageURL && (
                             <div className='flex justify-center items-center p-2 max-h-full'>
-                                <img src={post.imageURL} alt='Post Image' />
+                                {
+                                    loadingImage && (
+                                        <Skeleton height='200px' width='100%' borderRadius='4' />
+                                    )
+                                }
+                                <img className={loadingImage ? 'hidden' : 'block'} src={post.imageURL} alt='Post Image' onLoad={() => setLoadingImg(false)} />
                             </div>
                         )
                     }
@@ -83,7 +105,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                         <IoBookmarkOutline size={20} />
                         <p className='text-sm'>Save</p>
                     </div>
-                    <div className='flex items-center gap-2 px-2 py-2.5 rounded hover:bg-gray-200 cursor-pointer'>
+                    <div onClick={handleDelete} className='flex items-center gap-2 px-2 py-2.5 rounded hover:bg-gray-200 cursor-pointer'>
                         <AiOutlineDelete size={20} />
                         <p className='text-sm'>Delete</p>
                     </div>

@@ -25,8 +25,8 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
     } = usePosts();
 
     const getPosts = async () => {
-        setLoading(true);
         try {
+            setLoading(true);
             //get posts for community
             const postQuery = query(
                 collection(firestore, 'posts'),
@@ -71,7 +71,6 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
                                     onDeletePost={onDeletePost}
                                 />
                             )))
-
                     }
                 </>
             }
