@@ -6,6 +6,7 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import PostItem from './PostItem';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import PostLoader from './PostLoader';
 
 type PostsProps = {
     communityData: Community;
@@ -57,18 +58,19 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
             {
                 <>
                     {
-
-                        postStateValue.posts.map((item, key) => (
-                            <PostItem
-                                key={key}
-                                post={item}
-                                userIsCreator={user?.uid === item.creatorId}
-                                userVoteValue={0}
-                                onVote={onVote}
-                                onSelectPost={onSelectPost}
-                                onDeletePost={onDeletePost}
-                            />
-                        ))
+                        loading
+                            ? (<PostLoader />)
+                            : (postStateValue.posts.map((item, key) => (
+                                <PostItem
+                                    key={key}
+                                    post={item}
+                                    userIsCreator={user?.uid === item.creatorId}
+                                    userVoteValue={0}
+                                    onVote={onVote}
+                                    onSelectPost={onSelectPost}
+                                    onDeletePost={onDeletePost}
+                                />
+                            )))
 
                     }
                 </>
