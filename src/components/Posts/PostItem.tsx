@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { IoArrowUpCircleSharp, IoArrowUpCircleOutline, IoArrowDownCircleSharp, IoArrowDownCircleOutline, IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';
 import { BsChat } from 'react-icons/bs';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { Skeleton } from '@chakra-ui/react';
+import { Skeleton, Spinner } from '@chakra-ui/react';
 
 
 type PostItemProps = {
@@ -18,9 +18,11 @@ type PostItemProps = {
 
 const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost }) => {
     const [loadingImage, setLoadingImg] = useState(true);
+    const [loadingDelete, setLoadingDelete] = useState(false);
     const [error, setError] = useState('');
 
     const handleDelete = async () => {
+        setLoadingDelete(true);
         try {
             const success = await onDeletePost(post);
 
@@ -32,6 +34,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
         } catch (error: any) {
             setError(error.message);
         }
+        setLoadingDelete(false);
     }
 
     return (
@@ -74,6 +77,12 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
             </div>
             <div className='flex flex-col w-full'>
                 <div className='flex flex-col'>
+                    {
+                        error && (<div className='bg-red-400 w-full'>
+                            <p>Error Deleting Post</p>
+                            <p>{error}</p>
+                        </div>)
+                    }
                     <div className='flex'>
                         <p className='text-xs'>posted by u/{post.creatorDisplayName}{" "}{moment(new Date(post.createdAt?.seconds * 1000)).fromNow()}</p>
                     </div>
@@ -105,6 +114,18 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                         <IoBookmarkOutline size={20} />
                         <p className='text-sm'>Save</p>
                     </div>
+                    {
+                        loadingDelete
+                            ? (<Spinner />)
+                            : (
+                                <>
+                                    <div onClick={handleDelete} className='flex items-center gap-2 px-2 py-2.5 rounded hover:bg-gray-200 cursor-pointer'>
+                                        <AiOutlineDelete size={20} />
+                                        <p className='text-sm'>Delete</p>
+                                    </div>
+                                </>
+                            )
+                    }
                     <div onClick={handleDelete} className='flex items-center gap-2 px-2 py-2.5 rounded hover:bg-gray-200 cursor-pointer'>
                         <AiOutlineDelete size={20} />
                         <p className='text-sm'>Delete</p>
