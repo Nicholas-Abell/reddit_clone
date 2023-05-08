@@ -14,6 +14,7 @@ type PostsProps = {
 
 const Posts: React.FC<PostsProps> = ({ communityData }) => {
     const [user] = useAuthState(auth);
+    const [loading, setLoading] = useState(false);
     const {
         postStateValue,
         setPostStateValue,
@@ -23,6 +24,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
     } = usePosts();
 
     const getPosts = async () => {
+        setLoading(true);
         try {
             //get posts for community
             const postQuery = query(
@@ -38,11 +40,11 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
                 ...prev,
                 posts: posts as Post[],
             }));
-
             console.log('posts: ', posts)
         } catch (error) {
             console.log('getPosts Error: ', error);
         }
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -53,17 +55,23 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
     return (
         <>
             {
-                postStateValue.posts.map((item, key) => (
-                    <PostItem
-                        key={key}
-                        post={item}
-                        userIsCreator={user?.uid === item.creatorId}
-                        userVoteValue={0}
-                        onVote={onVote}
-                        onSelectPost={onSelectPost}
-                        onDeletePost={onDeletePost}
-                    />
-                ))
+                <>
+                    {
+
+                        postStateValue.posts.map((item, key) => (
+                            <PostItem
+                                key={key}
+                                post={item}
+                                userIsCreator={user?.uid === item.creatorId}
+                                userVoteValue={0}
+                                onVote={onVote}
+                                onSelectPost={onSelectPost}
+                                onDeletePost={onDeletePost}
+                            />
+                        ))
+
+                    }
+                </>
             }
         </>
     )
