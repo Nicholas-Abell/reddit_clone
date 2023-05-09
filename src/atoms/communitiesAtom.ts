@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { Timestamp } from 'firebase/firestore';
 import { atom } from 'recoil';
 
@@ -19,7 +18,7 @@ export interface CommunitySnippet {
 
 interface CommunityState {
     mySnippets: CommunitySnippet[];
-    //visitedCommunitiies
+    currentCommunity?: Community;
 }
 
 const defaultCommunityState: CommunityState = {
