@@ -7,8 +7,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/src/firebase/clientApp";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/src/atoms/authModalAtom";
+import { Community } from "@/src/atoms/communitiesAtom";
 
-const CreatePostLink: React.FC = () => {
+type CreatePostLinkProps = {
+    communityData: Community;
+};
+
+
+const CreatePostLink: React.FC<CreatePostLinkProps> = ({ communityData }) => {
     const router = useRouter();
     const [user] = useAuthState(auth);
     const setAuthModalState = useSetRecoilState(authModalState);
@@ -18,7 +24,7 @@ const CreatePostLink: React.FC = () => {
             setAuthModalState({ open: true, view: 'login' });
             return;
         }
-        router.push(`/r/${router.query.community}/submit`); // returning undefined
+        router.push(`/r/${communityData.id}/submit`); // returning undefined
     };
 
     return (
