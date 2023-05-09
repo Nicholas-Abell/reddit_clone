@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
     const isJoined = !!communityStateValue.mySnippets.find((item) => item.communityId === communityData.id);
 
     return (
-        <div className='flex flex-col w-full h-[146px]'>
+        <div className='flex flex-col w-full h-[146px] mb-4'>
             <div className='w-full h-[120px] bg-blue-400' />
             <div className='flex flex-grow justify-center bg-white'>
                 <div className='flex w-[95%] max-w-[860px]'>

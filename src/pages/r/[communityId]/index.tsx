@@ -10,6 +10,7 @@ import PageContent from '@/src/components/Layout/PageContent';
 import CreatePostLink from '@/src/components/Community/CreatePostLink';
 import Posts from '@/src/components/Posts/Posts';
 import { useSetRecoilState } from 'recoil';
+import About from '@/src/components/Community/About';
 
 type CommunityPageProps = {
     communityData: Community;
@@ -41,7 +42,7 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ communityData }) => {
                     <Posts communityData={communityData} />
                 </>
                 <>
-                    <div>Right</div>
+                    <About communityData={communityData}/>
                 </>
             </PageContent>
         </>
