@@ -12,10 +12,10 @@ const useSelectFile = () => {
 
         reader.onload = (readerEvent) => {
             if (readerEvent.target?.result) {
-                setSelectedFile(readerEvent.target.result as string)
+                setSelectedFile(readerEvent.target.result as string);
             }
-        }
-    };
+        };
+    }
 
     return {
         selectedFile,

@@ -60,6 +60,8 @@ const NewPostForm: React.FC<NewPostFromProps> = ({ user }) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+
+
     const handleCreatePost = async () => {
         const { communityId } = router.query; // error: undefined
         setLoading(true);
