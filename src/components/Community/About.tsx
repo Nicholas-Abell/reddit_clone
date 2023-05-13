@@ -5,8 +5,6 @@ import { RiCakeLine } from 'react-icons/ri';
 import { Divider } from '@chakra-ui/react';
 import moment from 'moment';
 import Link from 'next/link';
-import router from 'next/router';
-
 
 type AboutProps = {
     communityData: Community;

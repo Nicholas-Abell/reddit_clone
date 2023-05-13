@@ -126,10 +126,10 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                                 </>
                             )
                     }
-                    <div onClick={handleDelete} className='flex items-center gap-2 px-2 py-2.5 rounded hover:bg-gray-200 cursor-pointer'>
+                    {/* <div onClick={handleDelete} className='flex items-center gap-2 px-2 py-2.5 rounded hover:bg-gray-200 cursor-pointer'>
                         <AiOutlineDelete size={20} />
                         <p className='text-sm'>Delete</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

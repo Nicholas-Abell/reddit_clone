@@ -15,6 +15,7 @@ import { nanoid } from 'nanoid';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { BiPoll } from 'react-icons/bi';
+import useSelectFile from '@/src/hooks/useSelectFile';
 
 
 type NewPostFromProps = {
@@ -56,7 +57,7 @@ const NewPostForm: React.FC<NewPostFromProps> = ({ user }) => {
         title: '',
         body: '',
     });
-    const [selectedFile, setSelectedFile] = useState<string>();
+    const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -65,7 +66,7 @@ const NewPostForm: React.FC<NewPostFromProps> = ({ user }) => {
         setLoading(true);
 
         const newPost: Post = {
-            id: nanoid(),
+            // id: nanoid(),
             communityId: communityId as string,
             creatorId: user.uid,
             creatorDisplayName: user.email!.split('@')[0],
@@ -94,20 +95,6 @@ const NewPostForm: React.FC<NewPostFromProps> = ({ user }) => {
         }
 
         setLoading(false);
-    };
-
-    const onSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const reader = new FileReader();
-
-        if (event.target.files?.[0]) {
-            reader.readAsDataURL(event.target.files[0]);
-        }
-
-        reader.onload = (readerEvent) => {
-            if (readerEvent.target?.result) {
-                setSelectedFile(readerEvent.target.result as string)
-            }
-        }
     };
 
     const onTextChange = ({
@@ -149,7 +136,7 @@ const NewPostForm: React.FC<NewPostFromProps> = ({ user }) => {
                     selectedTab === 'Images & Video' && (
                         <ImageUpload
                             selectedFile={selectedFile}
-                            onSelectedImage={onSelectImage}
+                            onSelectedImage={onSelectFile}
                             setSelectedTab={setSelectedTab}
                             setSelectedFile={setSelectedFile}
                         />
