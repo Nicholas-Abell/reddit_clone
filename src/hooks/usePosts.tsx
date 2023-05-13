@@ -1,14 +1,49 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import { Post, postState } from "../atoms/postAtom";
+import { Post, PostVote, postState } from "../atoms/PostAtom";
 import { deleteObject, ref } from "firebase/storage";
-import { firestore, storage } from "../firebase/clientApp";
-import { deleteDoc, doc } from "firebase/firestore";
+import { auth, firestore, storage } from "../firebase/clientApp";
+import { collection, deleteDoc, doc, writeBatch } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const usePosts = () => {
+    const [user] = useAuthState(auth);
     const [postStateValue, setPostStateValue] = useRecoilState(postState);
 
-    const onVote = async () => { };
+    const onVote = async (post: Post, vote: number, communityId: string) => {
+        try {
+            const { voteStatus } = post;
+            const existingVote = postStateValue.postVotes.find(vote => vote.postId === post.id);
+
+            const batch = writeBatch(firestore);
+            const updatedPost = { ...post };
+            const udatedPosts = { ...postStateValue.posts };
+            const updatedPostVotes = { ...postStateValue.postVotes };
+            const voteChange = vote;
+
+            //new vote
+            if (!existingVote) {
+                const postVoteRef = doc(collection(firestore, 'users', `${user?.uid}/postVotes`))
+                const newVote: PostVote = {
+                    id: postVoteRef.id,
+                    postId: post.id!,
+                    communityId,
+                    voteValue: vote,
+                };
+                batch.set(postVoteRef, newVote);
+            };
+
+
+            // setPostStateValue(prev => ({
+            //     ...prev,
+            //     posts: updatedPosts,
+            //     postVotes: 
+            // }))
+
+        } catch (error) {
+            console.log('OnVote Error: ', error);
+        }
+    };
 
     const onSelectPost = () => { };
 
