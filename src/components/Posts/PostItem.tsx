@@ -1,4 +1,4 @@
-import { Post } from '@/src/atoms/postAtom';
+import { Post } from '../../atoms/PostAtom';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { IoArrowUpCircleSharp, IoArrowUpCircleOutline, IoArrowDownCircleSharp, IoArrowDownCircleOutline, IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';

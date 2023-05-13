@@ -2,14 +2,13 @@ import React, { use, useState } from 'react';
 import TabItem from './TabItem';
 import TextInput from './PostForm/TextInput';
 import ImageUpload from './PostForm/ImageUpload';
-import { Post } from '../../atoms/postAtom';
+import { Post } from '../../atoms/PostAtom';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { Icon } from '@chakra-ui/react';
 import { Timestamp, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { firestore, storage } from '@/src/firebase/clientApp';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { nanoid } from 'nanoid';
 
 //icons
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
