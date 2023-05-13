@@ -1,5 +1,5 @@
 import { Community } from '@/src/atoms/communitiesAtom';
-import { Post } from '@/src/atoms/postAtom';
+import { Post } from '../../atoms/PostAtom';
 import { auth, firestore } from '@/src/firebase/clientApp';
 import usePosts from '@/src/hooks/usePosts';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
@@ -65,7 +65,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
                                     key={key}
                                     post={item}
                                     userIsCreator={user?.uid === item.creatorId}
-                                    userVoteValue={0}
+                                    userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === item.id)?.voteValue!}
                                     onVote={onVote}
                                     onSelectPost={onSelectPost}
                                     onDeletePost={onDeletePost}

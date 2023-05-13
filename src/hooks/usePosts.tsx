@@ -17,9 +17,9 @@ const usePosts = () => {
 
             const batch = writeBatch(firestore);
             const updatedPost = { ...post };
-            const udatedPosts = { ...postStateValue.posts };
-            const updatedPostVotes = { ...postStateValue.postVotes };
-            const voteChange = vote;
+            const updatedPosts = { ...postStateValue.posts };
+            let updatedPostVotes = { ...postStateValue.postVotes };
+            let voteChange = vote;
 
             //new vote
             if (!existingVote) {
@@ -31,14 +31,37 @@ const usePosts = () => {
                     voteValue: vote,
                 };
                 batch.set(postVoteRef, newVote);
-            };
 
+                updatedPost.voteStatus = voteStatus + vote;
+                updatedPostVotes = [...updatedPostVotes, newVote]
+            } else {
+                const postVoteRef = doc(firestore, 'users', `${user?.uid}/postVotes/${existingVote.id}`);
+                if (existingVote.voteValue === vote) {
+                    updatedPost.voteStatus === voteStatus - vote;
+                    updatedPostVotes = updatedPostVotes.filter(vote => vote.id !== existingVote.id);
+                    batch.delete(postVoteRef);
+                    voteChange *= -1;
+                } else {
+                    updatedPost.voteStatus = voteStatus + 2 * vote;
+                    const voteIndex = postStateValue.postVotes.findIndex(vote => vote.id === existingVote.id);
+                    updatedPostVotes[voteIndex] = {
+                        ...existingVote,
+                        voteValue: vote,
+                    };
+                    batch.update(postVoteRef, {
+                        posts: updatedPostVotes,
+                        postVotes: updatedPostVotes
+                    })
+                }
+            }
 
-            // setPostStateValue(prev => ({
-            //     ...prev,
-            //     posts: updatedPosts,
-            //     postVotes: 
-            // }))
+            const postIndex = postStateValue.posts.findIndex((item) => item.id === post.id);
+            updatedPosts[postIndex] = updatedPost;
+            setPostStateValue(prev => ({
+                ...prev,
+                posts: updatedPosts,
+                postVotes: updatedPostVotes
+            }));
 
         } catch (error) {
             console.log('OnVote Error: ', error);

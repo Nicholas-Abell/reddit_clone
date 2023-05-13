@@ -11,7 +11,7 @@ type PostItemProps = {
     post: Post;
     userIsCreator: boolean;
     userVoteValue: number;
-    onVote: () => {};
+    onVote: (post: Post, vote: number, communityId: string) => void;
     onDeletePost: (post: Post) => Promise<boolean>;
     onSelectPost: () => void;
 };
@@ -47,12 +47,14 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                     userVoteValue === 1
                         ? (
                             <IoArrowUpCircleSharp
+                                onClick={() => onVote(post, 1, post.communityId)}
                                 className='text-gray-400 cursor-pointer'
                                 size={25}
                             />
                         )
                         : (
                             <IoArrowUpCircleOutline
+                                onClick={() => onVote(post, 1, post.communityId)}
                                 className='text-gray-400 cursor-pointer'
                                 size={25}
                             />
@@ -63,12 +65,14 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                     userVoteValue === -1
                         ? (
                             <IoArrowDownCircleSharp
+                                onClick={() => onVote(post, -1, post.communityId)}
                                 className='text-[#4379ff] cursor-pointer'
                                 size={25}
                             />
                         )
                         : (
                             <IoArrowDownCircleOutline
+                                onClick={() => onVote(post, -1, post.communityId)}
                                 className='text-gray-400 cursor-pointer'
                                 size={25}
                             />
@@ -126,10 +130,6 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                                 </>
                             )
                     }
-                    {/* <div onClick={handleDelete} className='flex items-center gap-2 px-2 py-2.5 rounded hover:bg-gray-200 cursor-pointer'>
-                        <AiOutlineDelete size={20} />
-                        <p className='text-sm'>Delete</p>
-                    </div> */}
                 </div>
             </div>
         </div>
