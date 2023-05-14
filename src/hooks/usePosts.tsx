@@ -37,6 +37,9 @@ const usePosts = () => {
                     communityId,
                     voteValue: vote, // 1 or -1
                 };
+
+                console.log('New Vote');
+
                 batch.set(postVoteRef, newVote);
 
                 updatedPost.voteStatus = voteStatus + vote;
@@ -44,45 +47,57 @@ const usePosts = () => {
             }
             //Remove existing vote 
             else {
-                const postVoteRef = doc(firestore, 'users', `${user?.uid}/postVotes/${existingVote.id}`);
+                const postVoteRef = doc(
+                    firestore,
+                    'users',
+                    `${user?.uid}/postVotes/${existingVote.id}`
+                );
                 //Remove Vote
                 if (existingVote.voteValue === vote) {
-                    updatedPost.voteStatus === voteStatus - vote;
-                    updatedPostVotes = updatedPostVotes.filter(vote => vote.id !== existingVote.id);
+                    updatedPost.voteStatus = voteStatus - vote;
+                    updatedPostVotes = updatedPostVotes.filter(
+                        (vote) => vote.id !== existingVote.id
+                    );
+
                     batch.delete(postVoteRef);
+
                     voteChange *= -1;
                 }
                 //Change Vote 
                 else {
                     updatedPost.voteStatus = voteStatus + 2 * vote;
-                    const voteIndex = postStateValue.postVotes.findIndex(vote => vote.id === existingVote.id);
+
+                    const voteIndex = postStateValue.postVotes.findIndex(
+                        (vote) => vote.id === existingVote.id
+                    );
+
                     updatedPostVotes[voteIndex] = {
                         ...existingVote,
                         voteValue: vote,
                     };
+
                     batch.update(postVoteRef, {
-                        posts: updatedPostVotes,
-                        postVotes: updatedPostVotes
+                        voteValue: vote
                     });
 
                     voteChange = 2 * vote;
                 }
             }
 
-            //update State
-            const postIndex = postStateValue.posts.findIndex(item => item.id === post.id);
-            updatedPosts[postIndex!] = updatedPost;
-            setPostStateValue(prev => ({
-                ...prev,
-                posts: updatedPosts,
-                postVotes: updatedPostVotes
-            }));
-
             //update Firebase
             const postRef = doc(firestore, 'posts', post.id!);
             batch.update(postRef, { voteStatus: voteStatus + voteChange })
 
             await batch.commit();
+
+            //update State
+            const postIndex = postStateValue.posts.findIndex(item => item.id === post.id);
+            updatedPosts[postIndex!] = updatedPost;
+            setPostStateValue((prev) => ({
+                ...prev,
+                posts: updatedPosts,
+                postVotes: updatedPostVotes
+            }));
 
         } catch (error) {
             console.log('OnVote Error: ', error);
