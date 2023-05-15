@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Post, PostVote, postState } from "../atoms/PostAtom";
 import { deleteObject, ref } from "firebase/storage";
 import { auth, firestore, storage } from "../firebase/clientApp";
 import { collection, deleteDoc, doc, getDocs, query, where, writeBatch } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { communityState } from "../atoms/communitiesAtom";
+import { authModalState } from "../atoms/authModalAtom";
 
 //TypeError: updatedPostVotes is not iterable
 
@@ -13,8 +14,14 @@ const usePosts = () => {
     const [user] = useAuthState(auth);
     const [postStateValue, setPostStateValue] = useRecoilState(postState);
     const currentCommunity = useRecoilValue(communityState).currentCommunity;
+    const setAuthModalState = useSetRecoilState(authModalState);
 
     const onVote = async (post: Post, vote: number, communityId: string) => {
+        if (!user?.uid) {
+            setAuthModalState({ open: true, view: "login" });
+            return;
+        }
+
         try {
             const { voteStatus } = post;
             const existingVote = postStateValue.postVotes.find(vote => vote.postId === post.id);
@@ -24,11 +31,6 @@ const usePosts = () => {
             let updatedPosts = [...postStateValue.posts];
             let updatedPostVotes = [...postStateValue.postVotes];
             let voteChange = vote;
-
-            // if (!user?.uid) {
-            //     setAuthModalState({ open: true, view: "login" });
-            //     return;
-            // }
 
             //new vote
             if (!existingVote) {
@@ -115,14 +117,17 @@ const usePosts = () => {
                 const imageRef = ref(storage, `posts/${post.id}/image`);
                 await deleteObject(imageRef);
             }
+
             //delete post
             const postDocRef = doc(firestore, 'posts', post.id!);
             await deleteDoc(postDocRef);
+
             //update recoil state
             setPostStateValue((prev) => ({
                 ...prev,
                 posts: prev.posts.filter(item => item.id !== post.id),
-            }))
+            }));
+
         } catch (error) {
 
         }
@@ -151,6 +156,16 @@ const usePosts = () => {
         if (!user || !currentCommunity?.id) return;
         getCommunityPostVotes(currentCommunity?.id)
     }, [user, currentCommunity]);
+
+    useEffect(() => {
+        if (!user) {
+            //clear user post votes on logout
+            setPostStateValue((prev) => ({
+                ...prev,
+                postVotes: [],
+            }));
+        }
+    }, [user])
 
     return {
         postStateValue,

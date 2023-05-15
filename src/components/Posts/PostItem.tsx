@@ -48,7 +48,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                         ? (
                             <IoArrowUpCircleSharp
                                 onClick={() => onVote(post, 1, post.communityId)}
-                                className='text-gray-400 cursor-pointer'
+                                className='text-red-600 cursor-pointer'
                                 size={25}
                             />
                         )
