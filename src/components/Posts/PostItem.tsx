@@ -11,7 +11,12 @@ type PostItemProps = {
     post: Post;
     userIsCreator: boolean;
     userVoteValue?: number;
-    onVote: (post: Post, vote: number, communityId: string) => void;
+    onVote: (
+        event: React.MouseEvent<SVGElement, MouseEvent>,
+        post: Post,
+        vote: number,
+        communityId: string,
+    ) => void;
     onDeletePost: (post: Post) => Promise<boolean>;
     onSelectPost?: (post: Post) => void;
 };
@@ -20,6 +25,8 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
     const [loadingImage, setLoadingImg] = useState(true);
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [error, setError] = useState('');
+    const [singlePostPage, setSinglePostPage] = useState(false);
+
 
     const handleDelete = async () => {
         setLoadingDelete(true);
@@ -40,21 +47,21 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
     return (
         <div
             onClick={() => onSelectPost && onSelectPost(post)}
-            className='flex items-center gap-2 mb-2 bg-white border border-gray-300 rounded hover:border-gray-400'
+            className={`flex items-center gap-2 mb-2 bg-white border ${singlePostPage ? 'border-white' : 'border-gray-300'} rounded ${singlePostPage ? 'cursor-auto' : 'cursor-pointer'} ${singlePostPage ? 'hover:border-none' : 'hover:border-gray-400'}`}
         >
             <div className='flex flex-col h-full items-center bg-gray-200 rounded p-2'>
                 {
                     userVoteValue === 1
                         ? (
                             <IoArrowUpCircleSharp
-                                onClick={() => onVote(post, 1, post.communityId)}
+                                onClick={(event) => onVote(event, post, 1, post.communityId)}
                                 className='text-red-600 cursor-pointer'
                                 size={25}
                             />
                         )
                         : (
                             <IoArrowUpCircleOutline
-                                onClick={() => onVote(post, 1, post.communityId)}
+                                onClick={(event) => onVote(event, post, 1, post.communityId)}
                                 className='text-gray-400 cursor-pointer'
                                 size={25}
                             />
@@ -65,21 +72,23 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
                     userVoteValue === -1
                         ? (
                             <IoArrowDownCircleSharp
-                                onClick={() => onVote(post, -1, post.communityId)}
+                                onClick={(event) => onVote(event, post, -1, post.communityId)}
                                 className='text-[#4379ff] cursor-pointer'
                                 size={25}
                             />
                         )
                         : (
                             <IoArrowDownCircleOutline
-                                onClick={() => onVote(post, -1, post.communityId)}
+                                onClick={(event) => onVote(event, post, -1, post.communityId)}
                                 className='text-gray-400 cursor-pointer'
                                 size={25}
                             />
                         )
                 }
             </div>
-            <div className='flex flex-col w-full'>
+            <div
+                className='flex flex-col w-full'
+            >
                 <div className='flex flex-col'>
                     {
                         error && (<div className='bg-red-400 w-full'>

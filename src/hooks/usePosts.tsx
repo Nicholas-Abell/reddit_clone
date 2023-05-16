@@ -7,9 +7,7 @@ import { collection, deleteDoc, doc, getDocs, query, where, writeBatch } from "f
 import { useAuthState } from "react-firebase-hooks/auth";
 import { communityState } from "../atoms/communitiesAtom";
 import { authModalState } from "../atoms/authModalAtom";
-import { Router, useRouter } from "next/router";
-
-//TypeError: updatedPostVotes is not iterable
+import { useRouter } from "next/router";
 
 const usePosts = () => {
     const [user] = useAuthState(auth);
@@ -18,7 +16,13 @@ const usePosts = () => {
     const setAuthModalState = useSetRecoilState(authModalState);
     const router = useRouter();
 
-    const onVote = async (post: Post, vote: number, communityId: string) => {
+    const onVote = async (
+        event: React.MouseEvent<SVGAElement, MouseEvent>,
+        post: Post,
+        vote: number,
+        communityId: string
+    ) => {
+        event.stopPropagation();
         if (!user?.uid) {
             setAuthModalState({ open: true, view: "login" });
             return;
@@ -90,12 +94,6 @@ const usePosts = () => {
                 }
             }
 
-            //update Firebase
-            const postRef = doc(firestore, 'posts', post.id!);
-            batch.update(postRef, { voteStatus: voteStatus + voteChange })
-
-            await batch.commit();
-
             //update State
             const postIndex = postStateValue.posts.findIndex(item => item.id === post.id);
             updatedPosts[postIndex!] = updatedPost;
@@ -104,6 +102,19 @@ const usePosts = () => {
                 posts: updatedPosts,
                 postVotes: updatedPostVotes
             }));
+
+            if (postStateValue.selectedPost) {
+                setPostStateValue((prev) => ({
+                    ...prev,
+                    selectedPost: updatedPost,
+                }));
+            }
+
+            //update Firebase
+            const postRef = doc(firestore, 'posts', post.id!);
+            batch.update(postRef, { voteStatus: voteStatus + voteChange })
+
+            await batch.commit();
 
         } catch (error) {
             console.log('OnVote Error: ', error);
