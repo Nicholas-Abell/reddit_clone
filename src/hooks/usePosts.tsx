@@ -7,6 +7,7 @@ import { collection, deleteDoc, doc, getDocs, query, where, writeBatch } from "f
 import { useAuthState } from "react-firebase-hooks/auth";
 import { communityState } from "../atoms/communitiesAtom";
 import { authModalState } from "../atoms/authModalAtom";
+import { Router, useRouter } from "next/router";
 
 //TypeError: updatedPostVotes is not iterable
 
@@ -15,6 +16,7 @@ const usePosts = () => {
     const [postStateValue, setPostStateValue] = useRecoilState(postState);
     const currentCommunity = useRecoilValue(communityState).currentCommunity;
     const setAuthModalState = useSetRecoilState(authModalState);
+    const router = useRouter();
 
     const onVote = async (post: Post, vote: number, communityId: string) => {
         if (!user?.uid) {
@@ -108,7 +110,14 @@ const usePosts = () => {
         }
     };
 
-    const onSelectPost = () => { };
+    const onSelectPost = (post: Post) => {
+        setPostStateValue(
+            (prev) => ({
+                ...prev,
+                selectedPost: post,
+            }));
+        router.push(`/r/${post.communityId}/comments/${post.id}`);
+    };
 
     const onDeletePost = async (post: Post): Promise<boolean> => {
         try {

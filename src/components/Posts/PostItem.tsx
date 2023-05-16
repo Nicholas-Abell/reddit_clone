@@ -10,10 +10,10 @@ import { Skeleton, Spinner } from '@chakra-ui/react';
 type PostItemProps = {
     post: Post;
     userIsCreator: boolean;
-    userVoteValue: number;
+    userVoteValue?: number;
     onVote: (post: Post, vote: number, communityId: string) => void;
     onDeletePost: (post: Post) => Promise<boolean>;
-    onSelectPost: () => void;
+    onSelectPost?: (post: Post) => void;
 };
 
 const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost }) => {
@@ -39,7 +39,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
 
     return (
         <div
-            onClick={() => { }}
+            onClick={() => onSelectPost && onSelectPost(post)}
             className='flex items-center gap-2 mb-2 bg-white border border-gray-300 rounded hover:border-gray-400'
         >
             <div className='flex flex-col h-full items-center bg-gray-200 rounded p-2'>
