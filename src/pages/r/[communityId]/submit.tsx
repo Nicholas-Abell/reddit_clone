@@ -3,6 +3,7 @@ import About from '@/src/components/Community/About';
 import PageContent from '@/src/components/Layout/PageContent';
 import NewPostForm from '@/src/components/Posts/NewPostForm';
 import { auth } from '@/src/firebase/clientApp';
+import UseCommunityData from '@/src/hooks/UseCommunityData';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilValue } from 'recoil';
@@ -13,7 +14,7 @@ type submitProps = {
 
 const submit: React.FC<submitProps> = () => {
     const [user] = useAuthState(auth);
-    const communityStateValue = useRecoilValue(communityState);
+    const { communityStateValue } = UseCommunityData();
     console.log('Community State: ', communityStateValue)
 
     return (
@@ -25,7 +26,9 @@ const submit: React.FC<submitProps> = () => {
                 {user && <NewPostForm user={user} />}
             </>
             <>
-                {/* <About communityData={communityStateValue}/> */}
+                {communityStateValue.currentCommunity &&
+                    (<About communityData={communityStateValue.currentCommunity} />)
+                }
             </>
         </PageContent>
     )
