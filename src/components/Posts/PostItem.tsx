@@ -5,6 +5,7 @@ import { IoArrowUpCircleSharp, IoArrowUpCircleOutline, IoArrowDownCircleSharp, I
 import { BsChat } from 'react-icons/bs';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { Skeleton, Spinner } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 
 type PostItemProps = {
@@ -12,12 +13,15 @@ type PostItemProps = {
     userIsCreator: boolean;
     userVoteValue?: number;
     onVote: (
-        event: React.MouseEvent<SVGElement, MouseEvent>,
+        event: React.MouseEvent<any, MouseEvent>,
         post: Post,
         vote: number,
         communityId: string,
     ) => void;
-    onDeletePost: (post: Post) => Promise<boolean>;
+    onDeletePost: (
+        post: Post,
+        event: React.MouseEvent<HTMLElement, MouseEvent>,
+    ) => Promise<boolean>;
     onSelectPost?: (post: Post) => void;
 };
 
@@ -26,9 +30,10 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [error, setError] = useState('');
     const [singlePostPage, setSinglePostPage] = useState(false);
+    const router = useRouter();
 
-
-    const handleDelete = async () => {
+    const handleDelete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.stopPropagation();
         setLoadingDelete(true);
         try {
             const success = await onDeletePost(post);
@@ -38,6 +43,11 @@ const PostItem: React.FC<PostItemProps> = ({ post, userIsCreator, userVoteValue,
             }
 
             console.log('Post Deleted');
+
+            if (singlePostPage) {
+                router.push(`/r/${post.communityId}`);
+            }
+
         } catch (error: any) {
             setError(error.message);
         }
