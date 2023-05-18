@@ -5,23 +5,13 @@ import CommentInput from './CommentInput';
 import { Timestamp, collection, doc, increment, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { firestore } from '@/src/firebase/clientApp';
 import { useSetRecoilState } from 'recoil';
+import {Comment} from './CommentItem';
 
 type CommentsProps = {
     user: User;
     selectedPost: Post | null;
     communityId: string;
 };
-
-export type Comment = {
-    id: string;
-    creatorId: string;
-    creatorDisplayText: string;
-    communityId: string;
-    postId: string;
-    postTitle: string;
-    text: string;
-    createdAt: Timestamp;
-}
 
 const Comments: React.FC<CommentsProps> = ({ user, selectedPost, communityId }) => {
     const [commentText, setCommentText] = useState('');
