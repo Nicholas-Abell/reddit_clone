@@ -12,8 +12,17 @@ export type Comment = {
     createdAt: Timestamp;
 }
 
-const CommentItem:React.FC<Comment> = () => {
+type CommentItemProps = {
+  comment: Comment,
+  onDeleteComment: (comment: Comment) => void;
+  loadingDelete: boolean;
+  userId: string;  
+}
+
+const CommentItem:React.FC<Comment> = ({comment, onDeleteComment, loadingDelete, userId}) => {
     
-    return <div>Have a good coding</div>
+    return (
+        <></>
+    )
 }
 export default CommentItem;
