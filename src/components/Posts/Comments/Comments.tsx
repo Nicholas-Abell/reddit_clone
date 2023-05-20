@@ -6,8 +6,12 @@ import {
   Timestamp,
   collection,
   doc,
+  getDocs,
   increment,
+  orderBy,
+  query,
   serverTimestamp,
+  where,
   writeBatch,
 } from "firebase/firestore";
 import { firestore } from "@/src/firebase/clientApp";
@@ -80,11 +84,28 @@ const Comments: React.FC<CommentsProps> = ({
     // update client recoil state
   };
 
-  const getPostComments = async () => {};
+  const getPostComments = async () => {
+    try {
+      const commentsQuery = query(
+        collection(firestore, "comments"),
+        where("postId", "==", selectedPost?.id),
+        orderBy("createdAt", "desc")
+      );
+      const commentDocs = await getDocs(commentsQuery);
+      const comments = commentDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setComments(comments as Comment[]);
+    } catch (error) {
+      console.log("getPostComments Error", error);
+    }
+  };
 
   useEffect(() => {
+    if (!selectedPost) return;
     getPostComments();
-  }, []);
+  }, [selectedPost]);
 
   return (
     <div className="bg-white">
@@ -107,9 +128,12 @@ const Comments: React.FC<CommentsProps> = ({
               </Box>
             ))}
           </>
+        ) : comments.length === 0 ? (
+          <h1>No Comments</h1>
         ) : (
           comments.map((comment) => (
             <CommentItem
+              key={comment.id}
               comment={comment}
               onDeleteComment={onDeleteComment}
               loadingDelete={false}
