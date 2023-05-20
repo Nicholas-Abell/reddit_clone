@@ -13,6 +13,7 @@ import {
 import { firestore } from "@/src/firebase/clientApp";
 import { useSetRecoilState } from "recoil";
 import CommentItem, { Comment } from "./CommentItem";
+import { Box, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 type CommentsProps = {
   user: User;
@@ -97,14 +98,25 @@ const Comments: React.FC<CommentsProps> = ({
         />
       </div>
       <div className="flex flex-col gap-6">
-        {comments.map((comment) => (
-          <CommentItem
-            comment={comment}
-            onDeleteComment={onDeleteComment}
-            loadingDelete={false}
-            userId={user?.uid}
-          />
-        ))}
+        {fetchLoading ? (
+          <>
+            {[0, 1, 2].map((item) => (
+              <Box key={item} padding="6" bg="white">
+                <SkeletonCircle size="10" />
+                <SkeletonText mt="4" noOfLines={2} spacing="4" />
+              </Box>
+            ))}
+          </>
+        ) : (
+          comments.map((comment) => (
+            <CommentItem
+              comment={comment}
+              onDeleteComment={onDeleteComment}
+              loadingDelete={false}
+              userId={user?.uid}
+            />
+          ))
+        )}
       </div>
     </div>
   );
