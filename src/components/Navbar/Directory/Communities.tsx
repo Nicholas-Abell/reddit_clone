@@ -24,7 +24,7 @@ const Communities: React.FC<CommunitiesProps> = () => {
                     <div>
                         <GrAdd size={20} />
                     </div>
-                    Create Comunnity
+                    Create Community
                 </div>
             </MenuItem>
         </>
