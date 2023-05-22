@@ -5,6 +5,7 @@ import { atom } from 'recoil';
 export type Post = {
     id?: string;
     communityId: string;
+    communityImageUrl?: string;
     creatorId: string;
     creatorDisplayName: string;
     title: string;
@@ -12,7 +13,6 @@ export type Post = {
     numberOfComments: number;
     voteStatus: number;
     imageURL?: string;
-    communityImageURL?: string;
     createdAt: Timestamp;
 };
 
