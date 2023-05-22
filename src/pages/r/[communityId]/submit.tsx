@@ -21,7 +21,12 @@ const submit: React.FC<submitProps> = () => {
         <div className="w-full py-8 border-b border-b-white">
           <h1>Create a post</h1>
         </div>
-        {user && <NewPostForm user={user} />}
+        {user && (
+          <NewPostForm
+            user={user}
+            communityImageUrl={communityStateValue.currentCommunity?.imageURL}
+          />
+        )}
       </>
       <>
         {communityStateValue.currentCommunity && (
