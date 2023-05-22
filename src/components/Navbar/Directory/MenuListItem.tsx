@@ -1,3 +1,4 @@
+import useDirectory from "@/src/hooks/useDirectory";
 import { Icon, MenuItem } from "@chakra-ui/react";
 import React from "react";
 import { FaReddit } from "react-icons/fa";
@@ -18,8 +19,14 @@ const MenuListItem: React.FC<MenuListItemProps> = ({
   iconColor,
   imageUrl,
 }) => {
+  const { onSelectMenuItem } = useDirectory();
   return (
-    <MenuItem className="w-full hover:bg-gray-100">
+    <MenuItem
+      onClick={() =>
+        onSelectMenuItem({ displayText, link, icon, iconColor, imageUrl })
+      }
+      className="w-full hover:bg-gray-100"
+    >
       <div className="flex items-center gap-2">
         {imageUrl ? (
           <img src={imageUrl} className="rounded-full w-4 mr-2" />
