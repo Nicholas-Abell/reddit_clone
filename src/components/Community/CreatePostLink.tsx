@@ -8,47 +8,48 @@ import { auth } from "@/src/firebase/clientApp";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/src/atoms/authModalAtom";
 import { Community } from "@/src/atoms/communitiesAtom";
+import useDirectory from "@/src/hooks/useDirectory";
 
 type CreatePostLinkProps = {
-    communityData: Community;
+  communityData: Community;
 };
 
-
 const CreatePostLink: React.FC<CreatePostLinkProps> = ({ communityData }) => {
-    const router = useRouter();
-    const [user] = useAuthState(auth);
-    const setAuthModalState = useSetRecoilState(authModalState);
+  const router = useRouter();
+  const [user] = useAuthState(auth);
+  const setAuthModalState = useSetRecoilState(authModalState);
+  const { toggleMenuOpen } = useDirectory();
 
-    const onClick = () => {
-        if (!user) {
-            setAuthModalState({ open: true, view: 'login' });
-            return;
-        }
-        router.push(`/r/${communityData.id}/submit`); // returning undefined
-    };
+  const onClick = () => {
+    if (!user) {
+      setAuthModalState({ open: true, view: "login" });
+      return;
+    }
 
-    return (
-        <div className="flex justify-evenly items-center bg-white h-[56px] rounded border border-gray-300 p-2 mb-4">
-            <FaReddit size={50} className="mr-4 text-gray-300" />
-            <input
-                onClick={onClick}
-                type="text"
-                placeholder="Create Post"
-                className="text-sm bg-gray-50 border py-[7px] w-full rounded
+    const { communityId } = router.query;
+
+    if (communityId) {
+      router.push(`/r/${communityData.id}/submit`);
+      return;
+    }
+    toggleMenuOpen();
+  };
+
+  return (
+    <div className="flex justify-evenly items-center bg-white h-[56px] rounded border border-gray-300 p-2 mb-4">
+      <FaReddit size={50} className="mr-4 text-gray-300" />
+      <input
+        onClick={onClick}
+        type="text"
+        placeholder="Create Post"
+        className="text-sm bg-gray-50 border py-[7px] w-full rounded
                  placeholder:text-gray-500 mr-4 placeholder:p-4 hover:bg-white 
                  hover:border-blue-500 focus:outline-none focus:bg-white
                  focus:border-blue-500"
-            />
-            <IoImageOutline
-                size={34}
-                className="mr-4 text-gray-400 cursor-pointer"
-            />
-            <BsLink45Deg
-                size={34}
-                className="text-gray-400 cursor-pointer"
-            />
-        </div>
-
-    );
+      />
+      <IoImageOutline size={34} className="mr-4 text-gray-400 cursor-pointer" />
+      <BsLink45Deg size={34} className="text-gray-400 cursor-pointer" />
+    </div>
+  );
 };
 export default CreatePostLink;
