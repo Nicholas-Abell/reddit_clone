@@ -141,6 +141,12 @@ const UseCommunityData = () => {
       console.log("getCommunityData() Error: ", error);
     }
   };
+
+  useEffect(() => {
+    if (!user) return;
+    getMySnippets();
+  }, [user]);
+
   useEffect(() => {
     if (!user) {
       setCommunityStateValue((prev) => ({

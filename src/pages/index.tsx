@@ -15,7 +15,7 @@ import { Post } from "../atoms/PostAtom";
 import PostLoader from "../components/Posts/PostLoader";
 import PostItem from "../components/Posts/PostItem";
 import CreatePostLink from "../components/Community/CreatePostLink";
-import UseCommunityData from "../hooks/useCommunityData";
+import useCommunityData from "../hooks/useCommunityData";
 
 export default function Home() {
   const [user, loadingUser] = useAuthState(auth);
@@ -28,7 +28,7 @@ export default function Home() {
     onVote,
   } = usePosts();
 
-  const { communityStateValue } = UseCommunityData();
+  const { communityStateValue } = useCommunityData();
 
   const buildUserHomeFeed = async () => {
     try {
