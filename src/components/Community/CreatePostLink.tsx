@@ -11,7 +11,7 @@ import { Community } from "@/src/atoms/communitiesAtom";
 import useDirectory from "@/src/hooks/useDirectory";
 
 type CreatePostLinkProps = {
-  communityData: Community;
+  communityData?: Community;
 };
 
 const CreatePostLink: React.FC<CreatePostLinkProps> = ({ communityData }) => {
@@ -29,7 +29,7 @@ const CreatePostLink: React.FC<CreatePostLinkProps> = ({ communityData }) => {
     const { communityId } = router.query;
 
     if (communityId) {
-      router.push(`/r/${communityData.id}/submit`);
+      router.push(`/r/${communityData!.id}/submit`);
       return;
     }
     toggleMenuOpen();
