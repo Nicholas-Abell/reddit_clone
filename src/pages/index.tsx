@@ -16,7 +16,7 @@ import PostLoader from "../components/Posts/PostLoader";
 import PostItem from "../components/Posts/PostItem";
 import CreatePostLink from "../components/Community/CreatePostLink";
 import useCommunityData from "../hooks/useCommunityData";
-import { data } from "autoprefixer";
+import Recommendations from "../components/Community/Recommendations";
 
 export default function Home() {
   const [user, loadingUser] = useAuthState(auth);
@@ -148,7 +148,9 @@ export default function Home() {
           ))
         )}
       </>
-      <></>
+      <>
+        <Recommendations />
+      </>
     </PageContent>
   );
 }
