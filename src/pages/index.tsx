@@ -17,6 +17,8 @@ import PostItem from "../components/Posts/PostItem";
 import CreatePostLink from "../components/Community/CreatePostLink";
 import useCommunityData from "../hooks/useCommunityData";
 import Recommendations from "../components/Community/Recommendations";
+import { FaReddit } from "react-icons/fa";
+import useDirectory from "../hooks/useDirectory";
 
 export default function Home() {
   const [user, loadingUser] = useAuthState(auth);
@@ -30,6 +32,7 @@ export default function Home() {
   } = usePosts();
 
   const { communityStateValue } = useCommunityData();
+  const { setDirectoryState } = useDirectory();
 
   const buildUserHomeFeed = async () => {
     try {
@@ -120,6 +123,19 @@ export default function Home() {
       }));
     };
   }, [user, postStateValue.posts]);
+
+  useEffect(() => {
+    setDirectoryState((prev) => ({
+      ...prev,
+      selectedMenuItem: {
+        displayText: `Home`,
+        link: ``,
+        imageUrl: "",
+        icon: FaReddit,
+        iconColor: "blue.500",
+      },
+    }));
+  }, []);
 
   return (
     <PageContent>
