@@ -19,7 +19,7 @@ const Communities: React.FC<CommunitiesProps> = () => {
 
   return (
     <>
-      <CreateCommunityModal open={open} handleCLose={handleClose} />
+      <CreateCommunityModal open={open} handleClose={handleClose} />
       <div className="mt-3 mb-4">
         <p className="font-semibold text-gray-500 pl-3">MODERATING</p>
         <MenuItem
