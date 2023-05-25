@@ -1,4 +1,4 @@
-import { Post } from "@/src/atoms/PostAtom";
+import { Post, PostVote } from "@/src/atoms/PostAtom";
 import { communityState } from "@/src/atoms/communitiesAtom";
 import About from "@/src/components/Community/About";
 import PageContent from "@/src/components/Layout/PageContent";
@@ -8,7 +8,14 @@ import { auth, firestore } from "@/src/firebase/clientApp";
 import UseCommunityData from "@/src/hooks/useCommunityData";
 import usePosts from "@/src/hooks/usePosts";
 import { User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -41,6 +48,38 @@ const PostPage: React.FC = () => {
     }
   }, [router.query, postStateValue.selectedPost]);
 
+  const getUserPostVotes = async () => {
+    try {
+      const postIds = postStateValue.posts.map((post) => post.id);
+      const postVotesQuery = query(
+        collection(firestore, `users/${user?.uid}/postVotes`),
+        where("postId", "in", postIds)
+      );
+      const postVoteDocs = await getDocs(postVotesQuery);
+      const postVotes = postVoteDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: postVotes as PostVote[],
+      }));
+    } catch (error) {
+      console.log("getUserPostVotes Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) getUserPostVotes();
+    return () => {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }));
+    };
+  }, [user]);
+
   return (
     <PageContent>
       <>
@@ -51,7 +90,7 @@ const PostPage: React.FC = () => {
             onDeletePost={onDeletePost}
             userVoteValue={
               postStateValue.postVotes.find(
-                (item) => item.id === postStateValue.selectedPost?.id
+                (item) => item.postId === postStateValue.selectedPost?.id
               )?.voteValue
             }
             userIsCreator={user?.uid === postStateValue.selectedPost?.creatorId}
