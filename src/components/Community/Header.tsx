@@ -1,7 +1,7 @@
 import { Community } from "@/src/atoms/communitiesAtom";
 import { Button, Image } from "@chakra-ui/react";
 import React from "react";
-import UseCommunityData from "@/src/hooks/useCommunityData";
+import UseCommunityData from "../../hooks/UseCommunityData";
 
 //icons
 import { FaReddit } from "react-icons/fa";

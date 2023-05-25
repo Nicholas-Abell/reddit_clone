@@ -15,7 +15,7 @@ import { Post, PostVote } from "../atoms/PostAtom";
 import PostLoader from "../components/Posts/PostLoader";
 import PostItem from "../components/Posts/PostItem";
 import CreatePostLink from "../components/Community/CreatePostLink";
-import useCommunityData from "../hooks/useCommunityData";
+import useCommunityData from "../hooks/UseCommunityData";
 import Recommendations from "../components/Community/Recommendations";
 import { FaReddit } from "react-icons/fa";
 import useDirectory from "../hooks/useDirectory";

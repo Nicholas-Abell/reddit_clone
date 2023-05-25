@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Community } from "../../atoms/communitiesAtom";
-import UseCommunityData from "@/src/hooks/useCommunityData";
+import UseCommunityData from "../../hooks/UseCommunityData";
 import { firestore } from "@/src/firebase/clientApp";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import Link from "next/link";

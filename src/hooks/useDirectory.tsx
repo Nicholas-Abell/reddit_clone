@@ -50,6 +50,11 @@ const useDirectory = () => {
     }
   }, [communityStateValue.currentCommunity]);
 
-  return { directoryState, toggleMenuOpen, onSelectMenuItem, setDirectoryState };
+  return {
+    directoryState,
+    toggleMenuOpen,
+    onSelectMenuItem,
+    setDirectoryState,
+  };
 };
 export default useDirectory;

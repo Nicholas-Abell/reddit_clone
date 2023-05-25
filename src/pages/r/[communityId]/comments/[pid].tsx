@@ -1,11 +1,10 @@
 import { Post, PostVote } from "@/src/atoms/PostAtom";
-import { communityState } from "@/src/atoms/communitiesAtom";
 import About from "@/src/components/Community/About";
 import PageContent from "@/src/components/Layout/PageContent";
 import Comments from "@/src/components/Posts/Comments/Comments";
 import PostItem from "@/src/components/Posts/PostItem";
 import { auth, firestore } from "@/src/firebase/clientApp";
-import UseCommunityData from "@/src/hooks/useCommunityData";
+import UseCommunityData from "../../../../hooks/UseCommunityData";
 import usePosts from "@/src/hooks/usePosts";
 import { User } from "firebase/auth";
 import {

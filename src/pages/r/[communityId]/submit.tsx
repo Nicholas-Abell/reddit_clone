@@ -3,7 +3,7 @@ import About from "@/src/components/Community/About";
 import PageContent from "@/src/components/Layout/PageContent";
 import NewPostForm from "@/src/components/Posts/NewPostForm";
 import { auth } from "@/src/firebase/clientApp";
-import UseCommunityData from "@/src/hooks/useCommunityData";
+import UseCommunityData from "../../../hooks/UseCommunityData";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilValue } from "recoil";
