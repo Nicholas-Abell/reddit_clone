@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
           height="46px"
           display={{ base: "none", md: "unset" }}
         /> */}
-        <FaReddit size={25} className="text-red-500" />
+        <FaReddit size={25} className="text-red-500 px-1" />
       </div>
       {user && <Directory user={user} />}
       <SearchInput />
