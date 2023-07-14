@@ -7,6 +7,7 @@ import RightContent from "./RightContent/RightContent";
 import SearchInput from "./SearchInput";
 import useDirectory from "@/src/hooks/useDirectory";
 import { defaultMenuItem } from "@/src/atoms/directoryMenuAtom";
+import { FaReddit } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -18,12 +19,13 @@ const Navbar: React.FC = () => {
         onClick={() => onSelectMenuItem(defaultMenuItem)}
         className="flex justify-center items-center cursor-pointer"
       >
-        <Image src="/images/redditface.svg" height="30px" />
+        {/* <Image src="/images/redditface.svg" height="30px" />
         <Image
           src="/images/redditText.svg"
           height="46px"
           display={{ base: "none", md: "unset" }}
-        />
+        /> */}
+        <FaReddit size={25} className="text-red-500" />
       </div>
       {user && <Directory user={user} />}
       <SearchInput />
