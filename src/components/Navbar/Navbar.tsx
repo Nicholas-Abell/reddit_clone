@@ -19,13 +19,13 @@ const Navbar: React.FC = () => {
         onClick={() => onSelectMenuItem(defaultMenuItem)}
         className="flex justify-center items-center cursor-pointer"
       >
-        {/* <Image src="/images/redditface.svg" height="30px" />
+        {/* <Image src="/images/redditface.svg" height="30px" /> */}
+        <FaReddit size={25} className="text-red-500 px-1" />
         <Image
           src="/images/redditText.svg"
           height="46px"
           display={{ base: "none", md: "unset" }}
-        /> */}
-        <FaReddit size={25} className="text-red-500 px-1" />
+        />
       </div>
       {user && <Directory user={user} />}
       <SearchInput />
