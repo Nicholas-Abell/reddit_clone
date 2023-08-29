@@ -20,6 +20,8 @@ Explore the live version of the Reddit Clone:
 
 This project was built using a combination of modern technologies, including:
 
-- **Front-End:** Next js, Typescript, Taliwind CSS
+- **Front-End:** Next js, Typescript, 
+- **Style:** Taliwind CSS, Chakra UI
+- **State Management:** Recoil
 - **Back-End:** Firebase
 - **Hosting:** Deployed on Vercel
